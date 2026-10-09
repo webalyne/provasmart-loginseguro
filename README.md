@@ -1,218 +1,151 @@
 # ProvaSmart Auth
 
-Sistema de login seguro para uma aplicação educacional, com Spring Boot,
-Thymeleaf, Spring Security e MongoDB Atlas.
+Projeto da atividade de login seguro, feito com Java 21, Spring Boot,
+Spring Security, Thymeleaf e MongoDB Atlas.
 
-Este é um projeto individual e separado dos repositórios do PFC.
+O sistema tem cadastro, login, logout e três perfis: administrador,
+professor e estudante. Cada perfil tem acesso às suas páginas.
+O administrador também pode editar, desativar e excluir outras contas.
+O cadastro pela tela cria uma conta de estudante.
 
-## Funcionalidades
+As senhas são salvas com BCrypt. Os dados dos usuários e as sessões
+ficam no MongoDB, nas coleções `users` e `sessions`.
+Este repositório é separado do projeto de PFC.
 
-- Cadastro de estudantes, login e logout.
-- Senhas armazenadas com hash BCrypt.
-- Validação de nome, e-mail e confirmação de senha.
-- Perfis ADMIN, PROFESSOR e ESTUDANTE.
-- Páginas protegidas conforme o perfil.
-- Administração: listar, editar, ativar, desativar e excluir usuários.
-- Usuários e sessões armazenados no MongoDB.
-- Temas visuais separados da lógica de negócio.
+## Como executar
 
-O cadastro público sempre cria uma conta ESTUDANTE.
-O administrador pode alterar o perfil de outras contas.
-Ele não pode alterar nem excluir a própria conta pela tela de administração.
+É necessário ter o JDK 21 e uma conexão com o MongoDB Atlas.
+O Maven Wrapper já está incluído no projeto.
 
-## Requisitos
-
-- JDK 21.
-- Maven 3.9 ou Maven Wrapper.
-- Um cluster MongoDB Atlas.
-
-## Configurar o MongoDB Atlas
-
-1. Crie um cluster e um usuário de banco de dados.
-2. Dê ao usuário permissão de leitura e escrita no banco `provasmart_auth`.
-3. Na lista de acesso de rede, autorize o IP da máquina que executará o projeto.
-4. Em Connect > Drivers, copie a URI de conexão.
-5. Informe o banco `provasmart_auth` na URI e mantenha TLS habilitado.
-
-O usuário do banco é diferente da conta usada para entrar no site do Atlas.
-Se a senha tiver caracteres especiais, codifique-os para uso na URI.
-
-Formato de referência, sem credenciais reais:
+No Atlas, crie um usuário com permissão de leitura e escrita no banco
+`provasmart_auth` e libere o IP do computador na lista de acesso de rede.
+Copie a conexão em **Connect > Drivers**, informando o nome do banco:
 
 ```text
 mongodb+srv://USUARIO:SENHA@CLUSTER.mongodb.net/provasmart_auth?tls=true
 ```
 
-Defina a URI na variável de ambiente `MONGODB_URI`.
-O arquivo `.env.example` mostra as variáveis usadas.
-O Spring Boot não lê arquivos `.env` automaticamente.
+Se a senha tiver caracteres especiais, eles precisam ser codificados
+para uso na URI. A conexão real deve ficar fora do repositório.
 
-No PowerShell, use entrada protegida para não salvar a URI no histórico:
+No PowerShell, informe a conexão sem deixá-la no histórico:
 
 ```powershell
-$uriSegura = Read-Host 'URI do MongoDB Atlas' -AsSecureString
-$env:MONGODB_URI = [System.Net.NetworkCredential]::new('', $uriSegura).Password
+$uri = Read-Host 'Conexão com o Atlas' -AsSecureString
+$env:MONGODB_URI = [System.Net.NetworkCredential]::new('', $uri).Password
 ```
 
-No Linux ou macOS:
+O arquivo `.env.example` contém as variáveis de configuração.
+Ele serve como exemplo; o Spring Boot não carrega o `.env` automaticamente.
+
+Para iniciar no Windows:
+
+```powershell
+.\mvnw.cmd spring-boot:run
+```
+
+No Linux ou macOS, defina `MONGODB_URI` no ambiente e execute:
 
 ```sh
-read -rs MONGODB_URI
-export MONGODB_URI
+./mvnw spring-boot:run
 ```
 
-Não publique a URI real nem senhas no GitHub.
+Depois, acesse [localhost:8080](http://localhost:8080).
 
-## Primeiro administrador
+## Conta de administrador
 
-Na primeira execução, configure:
+Para criar o primeiro administrador, configure estas variáveis antes
+de iniciar a aplicação:
 
 ```powershell
 $env:BOOTSTRAP_ADMIN_ENABLED = 'true'
 $env:BOOTSTRAP_ADMIN_EMAIL = Read-Host 'E-mail do administrador'
-$senhaSegura = Read-Host 'Senha do administrador' -AsSecureString
+$senha = Read-Host 'Senha do administrador' -AsSecureString
 $env:BOOTSTRAP_ADMIN_PASSWORD = [System.Net.NetworkCredential]::new(
-    '', $senhaSegura
+    '', $senha
 ).Password
 ```
 
-Use uma senha de 12 a 64 caracteres, com no máximo 72 bytes em UTF-8.
-Não existe senha padrão.
+A senha deve ter de 12 a 64 caracteres e até 72 bytes em UTF-8.
+O e-mail não pode pertencer a uma conta já cadastrada.
 
-A inicialização cria o administrador apenas se o e-mail ainda não existir.
-Ela não transforma uma conta de estudante em administrador.
-
-Depois de criar a conta, encerre a aplicação e desative a inicialização:
+Após criar o administrador, encerre a aplicação e remova essa configuração:
 
 ```powershell
 $env:BOOTSTRAP_ADMIN_ENABLED = 'false'
 Remove-Item Env:BOOTSTRAP_ADMIN_PASSWORD
 ```
 
-## Executar
+Para criar uma conta de professor, faça o cadastro e altere o perfil
+pela tela de usuários do administrador.
 
-No Windows:
+## Organização do código
 
-```powershell
-.\mvnw.cmd spring-boot:run
-```
+- `config`: configurações de segurança, sessões e tema.
+- `security`: autenticação e verificação da conta.
+- `user`: dados, acesso ao banco e regras dos usuários.
+- `web`: controladores e formulários.
+- `templates`: páginas Thymeleaf e fragmentos de layout.
+- `static/css`: estilos e cores dos temas.
 
-No Linux ou macOS:
+As regras ficam nos serviços e o acesso ao banco fica no repositório.
+As páginas recebem os dados dos controladores.
 
-```sh
-./mvnw spring-boot:run
-```
+## Acesso às páginas
 
-Se já tiver Maven instalado, use `mvn spring-boot:run`.
-Acesse [http://localhost:8080](http://localhost:8080).
-
-Para cadastrar professores, primeiro crie a conta pelo cadastro público.
-Entre como administrador e altere o perfil em Usuários > Editar.
-
-## Estrutura
-
-```text
-src/main/java/br/com/provasmart/auth/
-  config/       configurações de segurança, sessão e tema
-  security/     autenticação e verificação de conta
-  user/         modelo, repositório e regras de usuários
-  web/          controladores e formulários
-
-src/main/resources/
-  templates/    páginas Thymeleaf e fragmentos compartilhados
-  static/css/   estilos básicos e temas
-  application.yml
-
-src/test/       testes de cadastro, autorização e sessões
-docs/          base da documentação
-```
-
-Os controladores recebem os formulários e chamam o serviço.
-O serviço aplica as regras e utiliza o repositório para acessar o MongoDB.
-As páginas não acessam o banco diretamente.
-
-## Rotas
-
-| Rota | Acesso |
+| Página | Quem pode acessar |
 | --- | --- |
-| /, /login, /cadastro | Público |
-| /painel, /perfil | Usuário autenticado |
-| /admin/usuarios | ADMIN |
-| /professor/painel | PROFESSOR |
-| /estudante/painel | ESTUDANTE |
+| Início, login e cadastro | Todos |
+| Painel e perfil | Usuários autenticados |
+| Administração de usuários | Administrador |
+| Painel do professor | Professor |
+| Painel do estudante | Estudante |
 
-## Segurança e sessões
+O administrador não pode excluir ou alterar a própria conta nessa tela.
+Quando uma conta é desativada, excluída ou muda de perfil, sua sessão
+é encerrada na próxima requisição.
 
-Os formulários usam a proteção CSRF do Spring Security.
-O logout aceita POST com o token CSRF.
-O identificador da sessão é alterado após o login.
-
-O cookie SESSION usa HttpOnly e SameSite=Lax.
+Os formulários usam proteção CSRF e o logout é feito por POST.
 As sessões expiram após 30 minutos sem atividade.
-A biblioteca Spring Session grava as sessões na coleção `sessions`.
-O índice TTL remove os documentos expirados; o MongoDB pode levar algum tempo
-para executar essa limpeza.
+O cookie usa HttpOnly e SameSite=Lax. Para executar com HTTPS,
+configure `COOKIE_SECURE=true`.
 
-A coleção `users` contém os dados da conta e o hash da senha.
-O índice único de e-mail impede contas duplicadas.
+## Temas
 
-Em cada requisição autenticada, a aplicação verifica se a conta ainda existe,
-está ativa e mantém o mesmo perfil.
-Se houver mudança de perfil, desativação ou exclusão, a sessão é encerrada.
+O tema padrão é `provasmart`. Para usar o outro tema, defina
+`APP_THEME=neutral` no ambiente.
 
-Para servir a aplicação com HTTPS, configure `COOKIE_SECURE=true`.
-O valor false permite testar o projeto em HTTP no localhost.
-
-## Alterar o tema
-
-Defina `APP_THEME=neutral` para usar o tema neutro.
-O tema padrão é `provasmart`.
-
-As cores ficam em `static/css/themes/`.
-O estilo comum fica em `static/css/base.css`.
+As cores ficam em `static/css/themes/` e o estilo comum em `base.css`.
 O cabeçalho e o rodapé ficam em `templates/fragments/layout.html`.
-
-Para mudar o nome mostrado nas páginas, configure `APP_BRAND`.
+Assim, é possível mudar a aparência sem alterar as regras do sistema.
+O nome exibido nas páginas pode ser alterado pela variável `APP_BRAND`.
 
 ## Testes
 
-```sh
-./mvnw verify
+Para executar os testes:
+
+```powershell
+.\mvnw.cmd verify
 ```
 
-Sem um banco de testes configurado, os testes de integração ficam desativados.
-Os testes de cadastro e rotas continuam sendo executados.
-
-Para testar também a persistência, use um MongoDB exclusivo para testes:
+Os testes de integração precisam de um banco separado para testes:
 
 ```powershell
 $env:MONGODB_TEST_URI = 'mongodb://localhost:27017/provasmart_auth_test'
 .\mvnw.cmd verify
 ```
 
-Não use o banco de produção nos testes.
-O workflow do GitHub executa a suíte com um MongoDB de teste.
+Sem essa variável, os testes de integração são pulados.
+Os demais testes continuam sendo executados.
+O GitHub Actions executa a suíte com um MongoDB de teste.
 
-## Gitflow
+## Branches
 
-- `main`: versão de entrega.
-- `develop`: integração do desenvolvimento.
-- `feature/*`: implementação das funcionalidades.
-- `release/*`: preparação da versão.
-- `hotfix/*`: correções da versão entregue.
-
-As funcionalidades entram em develop.
-A release é integrada em main e develop, e recebe uma tag de versão.
+O projeto segue Gitflow: `main` para a entrega, `develop` para integração,
+`feature/*` para funcionalidades e `release/*` para preparação da versão.
+Correções da versão entregue podem usar `hotfix/*`.
 
 ## Documentação
 
-A base está em [docs/documentacao-base.md](docs/documentacao-base.md).
-Complete os dados acadêmicos e exporte o documento final em PDF conforme
-o modelo exigido pela instituição.
-
-## Referências
-
-- [Spring Security](https://docs.spring.io/spring-security/reference/)
-- [Spring Data MongoDB](https://docs.spring.io/spring-data/mongodb/reference/)
-- [Spring Session MongoDB](https://docs.spring.io/spring-session-data-mongodb/docs/current/reference/html/)
-- [Conexão com o Atlas](https://www.mongodb.com/docs/atlas/connect-to-database-deployment/)
+A descrição da estrutura, da integração com o Atlas e das decisões
+do projeto está em [docs/documentacao-base.md](docs/documentacao-base.md).
