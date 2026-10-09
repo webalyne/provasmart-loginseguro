@@ -139,12 +139,6 @@ Sem essa variável, os testes de integração são pulados.
 Os demais testes continuam sendo executados.
 O GitHub Actions executa a suíte com um MongoDB de teste.
 
-## Branches
-
-O projeto segue Gitflow: `main` para a entrega, `develop` para integração,
-`feature/*` para funcionalidades e `release/*` para preparação da versão.
-Correções da versão entregue podem usar `hotfix/*`.
-
 ## Documentação
 
 A descrição da estrutura, da integração com o Atlas e das decisões
