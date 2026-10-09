@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Painel')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: header}"></header>
+    <main>
+        <h1>Painel</h1>
+        <p>Olá, <span th:text="${account.name}">usuário</span>.</p>
+        <p>Perfil: <strong th:text="${account.role}">ESTUDANTE</strong></p>
+        <ul>
+            <li><a th:href="@{/perfil}">Meu perfil</a></li>
+            <li sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{/admin/usuarios}">Gerenciar usuários</a>
+            </li>
+            <li sec:authorize="hasRole('PROFESSOR')">
+                <a th:href="@{/professor/painel}">Área do professor</a>
+            </li>
+            <li sec:authorize="hasRole('ESTUDANTE')">
+                <a th:href="@{/estudante/painel}">Área do estudante</a>
+            </li>
+        </ul>
+    </main>
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
