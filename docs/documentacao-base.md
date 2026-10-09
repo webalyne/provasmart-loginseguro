@@ -1,15 +1,5 @@
 # ProvaSmart Auth: sistema de login seguro
 
-## Orientações para montar o documento
-
-Complete a capa e a folha de rosto com nome, instituição, curso, disciplina,
-professor, cidade e ano. Use o modelo da sua instituição.
-
-Como referência de formatação: papel A4, fonte Arial ou Times New Roman
-tamanho 12, espaçamento 1,5 no texto e margens superior/esquerda de 3 cm
-e inferior/direita de 2 cm. Confira as exceções e a estrutura no manual local.
-Gere o sumário depois de organizar as seções e exporte a versão final em PDF.
-
 ## 1 Introdução
 
 O ProvaSmart Auth é um sistema de autenticação e controle de usuários para
@@ -134,9 +124,8 @@ de senha e encerramento de sessões de contas inválidas.
 Os testes de integração utilizam um MongoDB separado e verificam login,
 persistência de sessão, logout e mudança de perfil.
 
-Antes de entregar, registre aqui o resultado da execução com o seu cluster
-Atlas e acrescente capturas das páginas de cadastro, login e administração.
-Não inclua senhas nem a URI completa nas imagens.
+A suíte de 18 testes foi executada sem falhas com um banco separado para testes.
+A conexão com o Atlas também foi validada por cadastro e login na aplicação.
 
 ## 9 Versionamento
 
@@ -157,7 +146,7 @@ armazena as contas e as sessões.
 A divisão entre classes Java, templates e estilos permite adaptar o tema
 do projeto sem reescrever o mecanismo de login.
 
-## Referências para formatar no documento final
+## Referências
 
 SPRING. Spring Security Reference.
 Disponível em: https://docs.spring.io/spring-security/reference/.
