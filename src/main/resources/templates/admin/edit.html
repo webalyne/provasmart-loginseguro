@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Editar usuário')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: header}"></header>
+    <main>
+        <section class="formulario">
+            <h1>Editar usuário</h1>
+            <p th:text="${account.email}"></p>
+            <form th:action="@{/admin/usuarios/{id}/editar(id=${account.id})}"
+                  th:object="${form}" method="post">
+                <div class="erro" role="alert" th:if="${#fields.hasAnyErrors()}">
+                    <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
+                </div>
+                <label for="name">Nome</label>
+                <input id="name" th:field="*{name}"
+                       minlength="2" maxlength="100" required>
+                <label for="role">Perfil</label>
+                <select id="role" th:field="*{role}">
+                    <option th:each="r : ${roles}"
+                            th:value="${r}" th:text="${r}"></option>
+                </select>
+                <label>
+                    <input type="checkbox" th:field="*{enabled}"> Conta ativa
+                </label>
+                <button type="submit">Salvar</button>
+            </form>
+            <hr>
+            <form th:action="@{/admin/usuarios/{id}/excluir(id=${account.id})}"
+                  method="post">
+                <label>
+                    <input type="checkbox" required>
+                    Confirmo a exclusão permanente desta conta.
+                </label>
+                <button type="submit">Excluir conta</button>
+            </form>
+            <p><a th:href="@{/admin/usuarios}">Voltar</a></p>
+        </section>
+    </main>
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
