@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: provasmart-auth
+  data:
+    mongodb:
+      uri: ${MONGODB_URI}
+      auto-index-creation: true
+  thymeleaf:
+    cache: true
+server:
+  port: ${PORT:8080}
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        same-site: lax
+        secure: ${COOKIE_SECURE:false}
+  error:
+    include-message: never
+    include-stacktrace: never
+    include-binding-errors: never
+app:
+  brand: ${APP_BRAND:ProvaSmart Auth}
+  theme: ${APP_THEME:provasmart}
+  bootstrap:
+    enabled: ${BOOTSTRAP_ADMIN_ENABLED:false}
+    email: ${BOOTSTRAP_ADMIN_EMAIL:}
+    password: ${BOOTSTRAP_ADMIN_PASSWORD:}

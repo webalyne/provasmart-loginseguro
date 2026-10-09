@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Cadastro')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: header}"></header>
+    <main>
+        <section class="formulario">
+            <h1>Cadastro</h1>
+            <p>Novas contas recebem o perfil ESTUDANTE.</p>
+            <form th:action="@{/cadastro}" th:object="${form}" method="post">
+                <div class="erro" role="alert" th:if="${#fields.hasAnyErrors()}">
+                    <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
+                </div>
+                <label for="name">Nome</label>
+                <input id="name" th:field="*{name}" autocomplete="name"
+                       minlength="2" maxlength="100" required>
+                <label for="email">E-mail</label>
+                <input id="email" th:field="*{email}" type="email"
+                       autocomplete="email" maxlength="254" required>
+                <label for="password">Senha</label>
+                <input id="password" name="password" type="password"
+                       autocomplete="new-password" minlength="12"
+                       maxlength="64" aria-describedby="senha-ajuda" required>
+                <p id="senha-ajuda">Use de 12 a 64 caracteres.</p>
+                <label for="confirmPassword">Confirme a senha</label>
+                <input id="confirmPassword" name="confirmPassword" type="password"
+                       autocomplete="new-password" minlength="12"
+                       maxlength="64" required>
+                <button type="submit">Cadastrar</button>
+            </form>
+            <p><a th:href="@{/login}">Voltar ao login</a></p>
+        </section>
+    </main>
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

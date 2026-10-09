@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Meu perfil')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: header}"></header>
+    <main>
+        <h1>Meu perfil</h1>
+        <p>Nome: <span th:text="${account.name}"></span></p>
+        <p>E-mail: <span th:text="${account.email}"></span></p>
+        <p>Perfil: <span th:text="${account.role}"></span></p>
+        <p>Situação:
+            <span th:text="${account.enabled ? 'Ativa' : 'Desativada'}"></span>
+        </p>
+        <a th:href="@{/painel}">Voltar ao painel</a>
+    </main>
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

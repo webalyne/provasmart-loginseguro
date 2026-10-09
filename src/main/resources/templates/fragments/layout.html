@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title} + ' | ' + ${brand}">ProvaSmart Auth</title>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{${themeCss}}">
+</head>
+<body>
+    <header th:fragment="header">
+        <nav aria-label="Navegação principal">
+            <a th:href="@{/}" th:text="${brand}">ProvaSmart Auth</a>
+            <a sec:authorize="isAnonymous()" th:href="@{/login}">Entrar</a>
+            <a sec:authorize="isAnonymous()" th:href="@{/cadastro}">Cadastro</a>
+            <a sec:authorize="isAuthenticated()" th:href="@{/painel}">Painel</a>
+            <a sec:authorize="isAuthenticated()" th:href="@{/perfil}">Meu perfil</a>
+            <form sec:authorize="isAuthenticated()"
+                  th:action="@{/logout}" method="post">
+                <button type="submit">Sair</button>
+            </form>
+        </nav>
+    </header>
+    <footer th:fragment="footer">
+        <p th:text="${brand}">ProvaSmart Auth</p>
+    </footer>
+</body>
+</html>
