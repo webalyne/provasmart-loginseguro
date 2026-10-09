@@ -1,0 +1,178 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--fundo);
+    color: #292735;
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+}
+
+header {
+    background: white;
+    border-bottom: 1px solid #dedbe5;
+}
+
+nav {
+    max-width: 960px;
+    margin: auto;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 22px;
+}
+
+nav > a:first-child {
+    margin-right: auto;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+nav form {
+    margin: 0;
+}
+
+main {
+    max-width: 900px;
+    min-height: 320px;
+    margin: 40px auto;
+    padding: 32px;
+    background: white;
+    border: 1px solid #dedbe5;
+    border-radius: 10px;
+}
+
+h1 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+p {
+    margin: 14px 0;
+}
+
+a {
+    color: var(--cor);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+.formulario {
+    max-width: 420px;
+    margin: auto;
+}
+
+label {
+    display: block;
+    margin-top: 18px;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+input:not([type="checkbox"]), select {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #aaa5b5;
+    border-radius: 5px;
+    font: inherit;
+    background: white;
+}
+
+input:focus, select:focus {
+    outline: 2px solid var(--cor);
+    outline-offset: 1px;
+}
+
+button {
+    margin-top: 20px;
+    padding: 11px 20px;
+    border: 0;
+    border-radius: 5px;
+    background: var(--cor);
+    color: white;
+    font: inherit;
+    cursor: pointer;
+}
+
+button:hover {
+    filter: brightness(0.9);
+}
+
+.formulario button {
+    width: 100%;
+}
+
+nav button {
+    margin-top: 0;
+    padding: 7px 16px;
+}
+
+.erro {
+    padding: 10px;
+    border: 1px solid #e8b1b1;
+    border-radius: 5px;
+    background: #fff1f1;
+    color: #9d2020;
+}
+
+.tabela {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+caption {
+    padding-bottom: 14px;
+    text-align: left;
+}
+
+th, td {
+    padding: 12px;
+    border-bottom: 1px solid #dedbe5;
+}
+
+th {
+    background: var(--fundo);
+}
+
+tbody tr:hover {
+    background: #faf9fc;
+}
+
+hr {
+    margin: 28px 0;
+    border: 0;
+    border-top: 1px solid #dedbe5;
+}
+
+footer {
+    padding: 18px;
+    color: #66616e;
+    text-align: center;
+}
+
+@media (max-width: 650px) {
+    nav {
+        gap: 14px;
+    }
+
+    main {
+        margin: 20px 12px;
+        padding: 22px;
+    }
+}

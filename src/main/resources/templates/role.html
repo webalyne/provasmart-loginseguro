@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Área do usuário')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: header}"></header>
+    <main>
+        <h1 th:text="'Área do ' + ${area}">Área do usuário</h1>
+        <p th:text="${description}"></p>
+        <a th:href="@{/painel}">Voltar ao painel</a>
+    </main>
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

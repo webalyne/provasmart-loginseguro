@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Erro')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: header}"></header>
+    <main>
+        <h1>Não foi possível concluir a operação</h1>
+        <p>Tente novamente.</p>
+        <a th:href="@{/}">Voltar ao início</a>
+    </main>
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
